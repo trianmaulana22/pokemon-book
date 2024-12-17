@@ -32,20 +32,35 @@ class GetPokemonInfo extends Command
         parent::__construct();
     }
 
+
     /**
      * Execute the console command.
      */
     public function handle()
     {
+        //引数を取得
         $poke_id = $this->argument('poke_id');
         $apiService = new ApiService;
         $Pokemons = new Pokemons;
 
         // 引数でポケモンのIDが指定されているかどうかで処理を分岐
+
         if (!empty($poke_id)) {
-}else{
-    $pokeid_min = 1;
-            $pokeid_max = 898;
+            $p_id = Pokemons::where('p_id', $poke_id)->first();
+            if (!empty($p_id)) {
+                return;
+            }
+            $result = $apiService->fetchData($poke_id);
+                $p_info = $this->getPokemonInfo($result);
+                print_r($p_info['id']);
+                print_r($p_info['jp_name']."\n");
+                print_r($p_info['en_name']."\n");
+                print_r("\n");
+                $p_info = $Pokemons->createPokemon($p_info);
+                sleep(1);
+        }else{
+            $pokeid_min = 1;    
+            $pokeid_max = 899;
             for ($i = $pokeid_min; $i <= $pokeid_max; $i++) {
                 $p_id = Pokemons::where('p_id', $i)->first();
                 if (! empty($p_id)) {
@@ -61,13 +76,17 @@ class GetPokemonInfo extends Command
                 $p_info = $Pokemons->createPokemon($p_info);
                 sleep(1);
             }
-}
+        }
     }
-    private function getPokemoninfo($d){
+
+    private function getPokemonInfo($d) {
         $p_info = [];
         // パラメータを設定
         $p_info['id'] = $d['id'];
         $p_info['en_name'] = $d['name'];
+        $from = "en"; // English
+        $to   = "ja"; // 日本語
+        $st = new GoogleTranslate($p_info['en_name'], $from, $to);
         $p_info['jp_name'] = $d['name'];
         $p_info['type1'] = $d['types'][0]['type']['name'];
         if (isset($d['types'][1])) {
