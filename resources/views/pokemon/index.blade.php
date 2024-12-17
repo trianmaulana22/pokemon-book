@@ -7,11 +7,11 @@
 
     <div class="container p-4 flex flex-wrap justify-center items-center gap-8">
         @foreach($pokemons as $pokemon)
-        <a href="#" class="pokemon-link text-green-500 text-xs" data-pokemon-id="{{ $pokemon['id'] }}">
-            No. {{ $pokemon['id'] }} {{ $pokemon['en_name'] }}
+        <a href="#" class="pokemon-link  text-green-500 text-xs" data-pokemon-id="{{ $pokemon['id'] }}">
+            No. {{ $pokemon['id'] }} {{ $pokemon['jp_name'] }}
             <div>
                 <img src="{{ $pokemon['front_default'] }}"
-                    class="w-full h-auto border border-gray-300 rounded-lg shadow-md bg-white">
+                    class="w-48 h-auto  rounded-lg shadow-md bg-white">
             </div>
         </a>
         @endforeach
@@ -20,8 +20,13 @@
     <div id="pokemonModal"
         class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex justify-center items-center border-green-500">
         <div class="bg-black rounded-lg p-4 w-full max-w-screen-md mx-auto relative">
-            <img src="{{ asset('storage/close-icon.svg') }}" id="closeModal"
-                class="absolute top-2 right-2 w-6 h-6 cursor-pointer">
+            <div id="closeModal" class="absolute top-2 right-2 cursor-pointer">
+                <span class="block w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
+            <span class="w-4 h-0.5 bg-black transform rotate-45 absolute"></span>
+        <span class="w-4 h-0.5 bg-black transform -rotate-45 absolute"></span>
+    </span>
+</div>
+
             <div id="modalContent"></div>
         </div>
     </div>
